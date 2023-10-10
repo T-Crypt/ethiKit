@@ -1,17 +1,19 @@
 from cryptography.fernet import Fernet
 
-# Generate a key
-key = Fernet.generate_key()
-cipher_suite = Fernet(key)
+def generate_key():
+    # Generate a key for encryption
+    return Fernet.generate_key()
 
-def encrypt_file(file_path):
+def encrypt_file(file_path, key):
+    cipher_suite = Fernet(key)
     with open(file_path, "rb") as file:
         file_data = file.read()
         encrypted_data = cipher_suite.encrypt(file_data)
     with open(file_path + ".enc", "wb") as encrypted_file:
         encrypted_file.write(encrypted_data)
 
-def decrypt_file(encrypted_file_path):
+def decrypt_file(encrypted_file_path, key):
+    cipher_suite = Fernet(key)
     with open(encrypted_file_path, "rb") as file:
         encrypted_data = file.read()
         decrypted_data = cipher_suite.decrypt(encrypted_data)
@@ -19,8 +21,21 @@ def decrypt_file(encrypted_file_path):
         decrypted_file.write(decrypted_data)
 
 # Example usage
-# Encrypt a file
-encrypt_file("example.txt")
+if __name__ == "__main__":
+    user_key = input("Enter the encryption key (or press Enter to generate a new key): ").encode()
+    if not user_key:
+        user_key = generate_key()
+        print("Generated Key:", user_key.decode())
 
-# Decrypt the encrypted file
-decrypt_file("example.txt.enc")
+    file_path = input("Enter the file path to encrypt: ")
+    encrypt_file(file_path, user_key)
+
+    encrypted_file_path = file_path + ".enc"
+    print("File encrypted successfully.")
+
+    decrypt_choice = input("Do you want to decrypt the file? (yes/no): ").lower()
+    if decrypt_choice == "yes":
+        decrypt_file(encrypted_file_path, user_key)
+        print("File decrypted successfully.")
+    else:
+        print("Encryption key and encrypted file path required for decryption.")
