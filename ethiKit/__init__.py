@@ -4,3 +4,4 @@ from . import http_server
 from . import enc_dec
 from . import scan
 from . import sshcrack
+from . import password
