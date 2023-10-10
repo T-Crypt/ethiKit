@@ -1,0 +1,5 @@
+cryptography==36.0.1
+keyboard==0.13.5
+scapy==2.4.5
+paramiko==2.8.0
+requests==2.26.0
