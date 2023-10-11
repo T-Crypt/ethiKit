@@ -5,3 +5,4 @@ from . import enc_dec
 from . import scan
 from . import sshcrack
 from . import password
+from . import evil
